@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const { collection } = require('./models/persons');
 // server connection
 mongoose.connect(process.env.MONGO_URI);
 
@@ -103,24 +104,44 @@ const findAndUpdate = (personName, done) => {
 
 // delete one document using Model.findByIdAndRemove method
 const removeById = (personId, done) => {
-  Person.findByIdAndRemove(personId, function (err, removedDoc) {
+  Person.findByIdAndRemove(personId, function (err, response) {
     if (err) {
       return console.log(err);
     }
-    done(null, removedDoc);
+    done(null, response);
   })
 };
 
+// delete many with Model.remove method
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-
-  done(null /*, data*/);
+  Person.remove({name: nameToRemove}, function (err, response) {
+    if (err) {
+      return console.log(err);
+    }
+    done(null, response);
+  })
 };
 
+// chain search query helpers to narrow search results
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-
-  done(null /*, data*/);
+  // create but don't execute query using Model.find method and store query into variable
+  const findQuery = Person.find({favoriteFoods: foodToSearch});
+  if(!findQuery) {
+    return console.log(err);
+  } else {
+    findPeopleFavoriteFood
+    .sort({name: -1}) // 1 for ascending order and -1 for descending order.
+    .limit(5) // return array with up to 5 items in it
+    .select({ favoriteFoods: 0 }) // hide certain property. 0 means false and thus hide name property; 1 means true so age property will show
+    .exec(function(err, people) {
+      if (err) {
+        return console.log(err);
+      }
+      done(null, people);
+    })
+  }
 };
 
 /** **Well Done !!**
