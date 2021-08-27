@@ -5,11 +5,11 @@ mongoose.connect(process.env.MONGO_URI);
 
 const Person = require('./models/persons');
 
-
+// create and save a person
 const createAndSavePerson = (done) => {
   const newPerson = new Person({
     name: "Sasquatch Jenkins",
-    age: 1022,
+    age: 420,
     favoriteFoods: [
       "salmon",
       "berries",
@@ -24,8 +24,19 @@ const createAndSavePerson = (done) => {
   });
 };
 
+// create many using 'Model.create()'
+let arrayOfPeople = [
+  {name: "Jose", age: 24, favoriteFoods: ["taco truck, pine nuts"]},
+  {name: "Barney", age: 72, favoriteFoods: ["smoked chicken, potato salad"]},
+  {name: "Chester", age: 18, favoriteFoods: ["olive garden, salad, breadsticks"]}
+]
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  Person.create(arrayOfPeople, function (err, people) {
+    if (err) {
+      return console.log(err);
+    }
+    done(null, people);
+  });
 };
 
 const findPeopleByName = (personName, done) => {
