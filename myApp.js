@@ -39,7 +39,7 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
-// use Model.find() to search database using search-key
+// use Model.find() to search database using a search-key
 const findPeopleByName = (personName, done) => {
   Person.find({name: personName}, function (err, personFound) {
     if (err) {
@@ -49,8 +49,14 @@ const findPeopleByName = (personName, done) => {
   });
 };
 
+// use Model.findOne() to return a single matching
 const findOneByFood = (food, done) => {
-  done(null /*, data*/);
+  Person.findOne({favoriteFoods: food}, function (err, data) {
+    if (err) {
+      return console.log(err);
+    }
+    done(null, data);
+  });
 };
 
 const findPersonById = (personId, done) => {
