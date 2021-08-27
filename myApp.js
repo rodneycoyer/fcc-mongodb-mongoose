@@ -1,13 +1,27 @@
 require('dotenv').config();
-
 const mongoose = require('mongoose');
+
 mongoose.connect(process.env.MONGO_URI);
 
 const Person = require('./models/persons');
 
 
 const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+  const newPerson = new Person({
+    name: "Sasquatch Jenkins",
+    age: 1022,
+    favoriteFoods: [
+      "salmon",
+      "berries",
+      "nuts"
+    ]
+  });
+  newPerson.save(function (err, data) {
+    if (err) {
+      return console.error(err);
+    }
+    done(null, data);
+  });
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
