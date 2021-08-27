@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-
+// server connection
 mongoose.connect(process.env.MONGO_URI);
 
 const Person = require('./models/persons');
@@ -16,15 +16,15 @@ const createAndSavePerson = (done) => {
       "nuts"
     ]
   });
-  newPerson.save(function (err, data) {
+  newPerson.save(function (err, person) {
     if (err) {
       return console.error(err);
     }
-    done(null, data);
+    done(null, person);
   });
 };
 
-// create many using 'Model.create()'
+// create many, array, using 'Model.create()'
 let arrayOfPeople = [
   {name: "Jose", age: 24, favoriteFoods: ["taco truck, pine nuts"]},
   {name: "Barney", age: 72, favoriteFoods: ["smoked chicken, potato salad"]},
@@ -39,8 +39,14 @@ const createManyPeople = (arrayOfPeople, done) => {
   });
 };
 
+// use Model.find() to search database using search-key
 const findPeopleByName = (personName, done) => {
-  done(null /*, data*/);
+  Person.find({name: personName}, function (err, personFound) {
+    if (err) {
+      return console.log(err);
+    }
+    done(null, personFound);
+  });
 };
 
 const findOneByFood = (food, done) => {
